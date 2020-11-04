@@ -1,7 +1,6 @@
 package entidades;
 
 import exceptions.DAOException;
-import interfaces.EdificioDao;
 import utiles.TableManager;
 
 public class Edificio {
@@ -69,7 +68,6 @@ public class Edificio {
 	public static void grabarEdificio() throws DAOException {
 		String sqlCreate = "CREATE TABLE edificios ( id_edificio INTEGER IDENTITY, domicilio VARCHAR(256), pisos VARCHAR(256), dep_por_pisos VARCHAR(10))";
 		String sqlDrop = "DROP TABLE edificios";
-		String sqlDelete = "DELETE FROM edificios";
 		TableManager tm = new TableManager();
 		tm.dropTable(sqlDrop);
 		tm.createTable(sqlCreate);

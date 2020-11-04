@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import exceptions.DAOException;
-import exceptions.ServicioException;
 import interfaces.EdificioDao;
 import utiles.DBManager;
 
@@ -30,7 +29,7 @@ public class EdificioDaoImpl implements EdificioDao {
 			try {
 				c.close();
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				throw new DAOException(e1);
 			}
 		}
 
@@ -46,15 +45,15 @@ public class EdificioDaoImpl implements EdificioDao {
 		} catch (SQLException e0) {
 			try {
 				c.rollback();
-				e0.printStackTrace();
+				throw new DAOException(e0);
 			} catch (SQLException e1) {
-				//No hago nada
+				e1.printStackTrace();
 			}
 		} finally {
 			try {
 				c.close();
 			} catch (SQLException e1) {
-				e1.getStackTrace();
+				throw new DAOException(e1);
 			}
 		}
 	}
@@ -71,15 +70,15 @@ public class EdificioDaoImpl implements EdificioDao {
 		} catch (SQLException e0) {
 			try {
 				c.rollback();
-				e0.printStackTrace();
+				throw new DAOException(e0);
 			} catch (SQLException e1) {
-				// no hago nada
+				e1.printStackTrace();
 			}
 		} finally {
 			try {
 				c.close();
 			} catch (SQLException e1) {
-				// no hago nada
+				e1.printStackTrace();
 			}
 		}
 
@@ -101,7 +100,7 @@ public class EdificioDaoImpl implements EdificioDao {
 			}
 
 		} catch (SQLException e) {
-				e.printStackTrace();
+			throw new DAOException(e);
 			
 		} finally {
 			try {
@@ -113,8 +112,8 @@ public class EdificioDaoImpl implements EdificioDao {
 		return resultado;
 	}
 
-	public List<Edificio> listarEdificios() {
-		List<Edificio> lista = new ArrayList<>();
+	public ArrayList<Edificio> listarEdificios() {
+		ArrayList<Edificio> lista = new ArrayList<>();
 		String sql = "SELECT * FROM edificios";
 		Connection c = DBManager.connect();
 		try {

@@ -1,14 +1,17 @@
 package ui;
 
-import javax.swing.JPanel;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+
+import entidades.Edificio;
+import entidades.EdificioService;
 import entidades.UnidadFuncional;
 import entidades.UnidadFuncionalService;
 import exceptions.CamposVaciosException;
@@ -21,7 +24,6 @@ public abstract class PanelTemplateUf extends PanelTemplate {
 	private JTextField textoDepartamento = new JTextField(30);
 	private JTextField textoPropietario = new JTextField(30);
 	private JLabel tituloLab1, tituloLab2, tituloLab3;
-	private JButton botonBuscar = new JButton("Buscar");
 
 	public PanelTemplateUf(String titulo) {
 		super(titulo);
@@ -35,15 +37,45 @@ public abstract class PanelTemplateUf extends PanelTemplate {
 			throw new CamposVaciosException("Campos vacios");
 		}
 
-		int idEdificio = Integer.parseInt(textoIdEdificio.getText());
-		String departamento = textoDepartamento.getText();
-		String propietario = textoPropietario.getText();
-		UnidadFuncional uf = new UnidadFuncional(idEdificio, departamento, propietario);
-		botonOK(uf);
+		try {
+			int idEdificio = Integer.parseInt(textoIdEdificio.getText());
+			String departamento = textoDepartamento.getText();
+			String propietario = textoPropietario.getText();
+			UnidadFuncional uf = new UnidadFuncional(idEdificio, departamento, propietario);
+			botonOK(uf);
+		} catch (NumberFormatException e) {
+			mostrarError("Error en la carga", "El ID del edificio debe ser numérico");
+		}
 
 	}
 
 	public abstract void botonOK(UnidadFuncional uf);
+
+	public String[] obtenerTitulosTabla() {
+		String[] titulos = { "ID Edificio", "Departamento", "Propietario" };
+		return titulos;
+	}
+
+	public String[][] obtenerDatosTabla() {
+		UnidadFuncionalService s = new UnidadFuncionalService();
+		ArrayList<UnidadFuncional> listadoUf = s.listarUf();
+		String matrizInfo[][] = new String[listadoUf.size()][3];
+		for (int i = 0; i < listadoUf.size(); i++) {
+			matrizInfo[i][0] = listadoUf.get(i).getIdEdificio() + "";
+			matrizInfo[i][1] = listadoUf.get(i).getDepto() + "";
+			matrizInfo[i][2] = listadoUf.get(i).getPropietario() + "";
+		}
+
+		return matrizInfo;
+	}
+
+	public void moverListaAJtext(JTable tabla) {
+		int selectedRowIndex = tabla.getSelectedRow();
+		textoIdEdificio.setText(tabla.getValueAt(selectedRowIndex, 0).toString());
+		textoDepartamento.setText(tabla.getValueAt(selectedRowIndex, 1).toString());
+		textoPropietario.setText(tabla.getValueAt(selectedRowIndex, 2).toString());
+
+	}
 
 	private void initUI(String titulo) {
 		this.setLayout(null);
@@ -71,71 +103,19 @@ public abstract class PanelTemplateUf extends PanelTemplate {
 		tituloLab3 = new JLabel("Propietario");
 		tituloLab3.setBounds(10, 90, 200, 30);
 		this.add(tituloLab3);
-
-		botonBuscar = new JButton("Buscar");
-		botonBuscar.setBounds(50, 200, 100, 30);
-		this.add(botonBuscar);
-		botonBuscar.setVisible(false);
-		botonBuscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					chequearTextoVacio();
-				} catch (CamposVaciosException e1) {
-					JOptionPane.showMessageDialog(null, "Error en la busqueda. " + e1.getMessage(), "ERROR",
-							JOptionPane.ERROR_MESSAGE);
-				}
-				
-				int idABuscar = Integer.parseInt(textoIdEdificio.getText());
-				String deptoABuscar = textoDepartamento.getText();
-				UnidadFuncional uf = new UnidadFuncional();
-				uf = buscarUf(idABuscar,deptoABuscar);
-				try {
-					verificarUfBuscado(uf);
-				} catch (UfNoEncontradaException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-				}
-				textoPropietario.setText(uf.getPropietario());
-				habilitarTextPanel();
-				habilitarBotonOk();
-
-			}
-			
-			private void verificarUfBuscado(UnidadFuncional uf)  throws UfNoEncontradaException {
-				if (uf.getIdEdificio() == 0) {
-					throw new UfNoEncontradaException("Unidad Funcional no encontrada");
-				}
-			}
-
-			private UnidadFuncional buscarUf(int idEdficio, String depto) {
-				UnidadFuncional uf = new UnidadFuncional();
-				UnidadFuncionalService s = new UnidadFuncionalService();
-				try {
-					uf = s.consultarUf(idEdficio, depto);
-				} catch (ServicioException e) {
-					e.printStackTrace();
-				}
-				return uf;
-			}
-
-			private void chequearTextoVacio() throws CamposVaciosException {
-				if (textoIdEdificio.getText().isEmpty() || textoDepartamento.getText().isEmpty()) {
-					throw new CamposVaciosException("Campos vacios");
-				}
-
-			}
-
-			private void habilitarTextPanel() {
-				textoPropietario.setEnabled(true);
-				deshabilitarBotonOk();
-			}
-		});
-
 	}
 
 	public void deshabilitarTextPanel() {
+		textoIdEdificio.setEnabled(false);
+		textoDepartamento.setEnabled(false);
 		textoPropietario.setEnabled(false);
-		botonBuscar.setVisible(true);
 		deshabilitarBotonOk();
+	}
+
+	public void habilitarJText() {
+		textoIdEdificio.setEnabled(false);
+		textoDepartamento.setEnabled(true);
+		textoPropietario.setEnabled(true);
 	}
 
 }

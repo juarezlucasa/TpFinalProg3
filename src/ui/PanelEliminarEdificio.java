@@ -1,16 +1,15 @@
 package ui;
 
-import javax.swing.JOptionPane;
 
 import entidades.Edificio;
 import entidades.EdificioService;
 import exceptions.ServicioException;
 
-public class PanelEliminarEdificio extends PanelListarEdificio {
+public class PanelEliminarEdificio extends PanelTemplateEdificio {
 
 	public PanelEliminarEdificio(String titulo) {
 		super(titulo);
-		super.deshabilitarTextPanel();
+		deshabilitarTextPanel();
 		super.deshabilitarBotonOk();
 		super.cambiarEtiquetaBoton("Eliminar Edificio");
 	}
@@ -19,10 +18,9 @@ public class PanelEliminarEdificio extends PanelListarEdificio {
 		EdificioService s = new EdificioService();
 		try {
 			s.eliminarEdificio(edificio.getIdEdificio());
-			JOptionPane.showMessageDialog(null, "Edificio eliminado", "Confirmación",
-					JOptionPane.INFORMATION_MESSAGE);
+			mostrarExito("Edificio eliminado");
 		} catch (ServicioException e) {
-			JOptionPane.showMessageDialog(null, "No se pudo eliminar el edificio al sistema - "+ e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+			mostrarError("No se pudo eliminar el edificio",e.getMessage());
 		}
 		
 	}

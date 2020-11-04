@@ -1,22 +1,8 @@
 package ui;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import entidades.Edificio;
-import entidades.EdificioService;
 import entidades.UnidadFuncional;
 import entidades.UnidadFuncionalService;
-import exceptions.DAOException;
 import exceptions.ServicioException;
 
 public class PanelEliminarUnidadFuncional extends PanelTemplateUf {
@@ -24,7 +10,7 @@ public class PanelEliminarUnidadFuncional extends PanelTemplateUf {
 	public PanelEliminarUnidadFuncional(String titulo) {
 		super(titulo);
 		super.deshabilitarTextPanel();
-		super.deshabilitarBotonOk();
+		super.deshabilitarBotonOk();   //SE HABILITA CUANDO SE HACE CLICK EN UN REGISTRO DE LA TABLA.
 		cambiarEtiquetaBoton("Eliminar UF");
 	}
 	
@@ -32,11 +18,10 @@ public class PanelEliminarUnidadFuncional extends PanelTemplateUf {
 		UnidadFuncionalService s = new UnidadFuncionalService();
 		try {
 			s.eliminarUf(uf.getIdEdificio(), uf.getDepto());
-			JOptionPane.showMessageDialog(null, "Se eliminó el edificio con éxito", "Confirmación",
-					JOptionPane.INFORMATION_MESSAGE);
+			mostrarExito("Se eliminó la UF con éxito");
 			super.deshabilitarTextPanel();
 		} catch (ServicioException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			mostrarError("Error al eliminar la UF",e1.getMessage());
 		}
 	}
 		

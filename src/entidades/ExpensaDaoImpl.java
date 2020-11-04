@@ -5,10 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 import exceptions.DAOException;
-import exceptions.ServicioException;
 import interfaces.ExpensaDao;
 import utiles.DBManager;
 
@@ -46,6 +44,7 @@ public class ExpensaDaoImpl implements ExpensaDao {
 					+ e.getIdEdificio() + "', '" + e.getDepto() + "', '" + e.getAniomes() + "'," + e.getMonto()
 					+ "," + e.getMontoPagado() + ")";
 			s.executeUpdate(sql);
+			//System.out.println("entre");
 			c.commit();
 		} catch (SQLException e0) {
 			try {
@@ -75,12 +74,6 @@ public class ExpensaDaoImpl implements ExpensaDao {
 			ResultSet rs = s.executeQuery(sql);
 
 			while (rs.next()) {
-				// System.out.println("Edificio:");
-				// System.out.print("\t" + rs.getInt("id_edificio"));
-				// System.out.print("\t" + rs.getString("domicilio"));
-				// System.out.print("\t" + rs.getString("pisos"));
-				// System.out.print("\t" + rs.getString("dep_por_pisos"));
-				// System.out.println();
 				int idEdificio = rs.getInt("id_edificio");
 				String departamento = rs.getString("departamento");
 				String propietario = rs.getString("propietario");
@@ -165,31 +158,6 @@ public class ExpensaDaoImpl implements ExpensaDao {
 	}
 
 	@Override
-	public void pagarExpensa(UnidadFuncional e) throws DAOException {
-		Connection c = DBManager.connect();
-		try {
-			Statement s = c.createStatement();
-			String sql = "";
-			s.executeUpdate(sql);
-			c.commit();
-		} catch (SQLException e0) {
-			try {
-				c.rollback();
-				throw new DAOException(e0);
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-		} finally {
-			try {
-				c.close();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-		}
-
-	}
-
-	@Override
 	public void pagarExpensa(int idEdificio, String departamento, String periodo, int monto) throws DAOException {
 		Connection c = DBManager.connect();
 		try {
@@ -197,6 +165,7 @@ public class ExpensaDaoImpl implements ExpensaDao {
 			String sql = "UPDATE EXPENSAS SET MONTO_ABONADO = " + monto + " WHERE ID_EDIFICIO= " + idEdificio
 					+ " AND departamento = '" + departamento + "' and aniomes= '" + periodo + "'";
 			int rowsUpdated = s.executeUpdate(sql);
+			//System.out.println(rowsUpdated);
 			if (rowsUpdated == 0) {
 				throw new DAOException("Error Primero debe calcular expensas para abonar");
 			}

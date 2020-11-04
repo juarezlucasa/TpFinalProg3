@@ -1,7 +1,6 @@
 package ui;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,13 +8,12 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 
 import entidades.Expensa;
 
 public class MiFrame extends JFrame implements ActionListener {
 
-	private JMenuItem m11, m12, m13, m21, m22, m23, m31, m32,m41,m42;
+	private JMenuItem m11, m12, m13, m21, m22, m23, m31,m32,m33,m41,m42;
 	private JMenuBar mb;
 	public MiFrame(String titulo) {
 		super(titulo);
@@ -50,14 +48,15 @@ public class MiFrame extends JFrame implements ActionListener {
 		m23 = new JMenuItem("Modificar unidad");
 		m23.addActionListener(this);
 		
-		m32 = new JMenuItem("Cargar Gastos");
+		m31 = new JMenuItem("Cargar Gastos");
+		m31.addActionListener(this);
+		m32 = new JMenuItem("Eliminar Gastos");
 		m32.addActionListener(this);
+		m33 = new JMenuItem("Modificar Gastos");
+		m33.addActionListener(this);
 		
-		m41 = new JMenuItem("Liquidar Expensas");
+		m41 = new JMenuItem("Liquidar/Abonar Expensas");
 		m41.addActionListener(this);
-		
-		m42= new JMenuItem("Abonar Expensas");
-		m42.addActionListener(this);
 		
 		
 		m1.add(m11);
@@ -66,9 +65,10 @@ public class MiFrame extends JFrame implements ActionListener {
 		m2.add(m21);
 		m2.add(m22);
 		m2.add(m23);
+		m3.add(m31);
 		m3.add(m32);
+		m3.add(m33);
 		m4.add(m41);
-		m4.add(m42);
 		add(BorderLayout.NORTH, mb);
 		this.setVisible(true);
 		//setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -107,18 +107,21 @@ public class MiFrame extends JFrame implements ActionListener {
 			limpiarFrame();
 			getContentPane().add(new PanelListarUnidadFuncional("Pepe2"));
 		}
-		if (e.getSource() == m32) {
+		if (e.getSource() == m31) {
 			limpiarFrame();
 			getContentPane().add(new PanelAgregarGasto("Pepe2"));
 		}
+		if (e.getSource() == m32) {
+			limpiarFrame();
+			getContentPane().add(new PanelEliminarGasto("Pepe2"));
+		}
+		if (e.getSource() == m33) {
+			limpiarFrame();
+			getContentPane().add(new PanelListarGasto("Pepe2"));
+		}
 		if (e.getSource() == m41) {
 			limpiarFrame();
-			Expensa.calcularExpensas();
-			getContentPane().add(new PanelLiquidarExpensas());
-		}
-		if (e.getSource() == m42) {
-			limpiarFrame();
-			getContentPane().add(new PanelPagarExpensas("Pepe2"));
+			getContentPane().add(new PanelLiquidarExpensas("Pepe"));
 		}
 		setVisible(true);
 	}

@@ -1,8 +1,6 @@
 package entidades;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import exceptions.DAOException;
 import exceptions.ServicioException;

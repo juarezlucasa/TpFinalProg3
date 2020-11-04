@@ -1,8 +1,8 @@
 package entidades;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import entidades.EdificioDaoImpl;
 import exceptions.DAOException;
 import exceptions.ServicioException;
 import interfaces.EdificioDao;
@@ -40,7 +40,7 @@ public class EdificioService {
 		}
 	}
 
-	public List<Edificio> listarEdificios() {
+	public ArrayList<Edificio> listarEdificios() {
 		return dao.listarEdificios();
 	}
 

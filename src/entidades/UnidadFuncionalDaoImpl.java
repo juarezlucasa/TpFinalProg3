@@ -5,11 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 import exceptions.DAOException;
-import exceptions.ServicioException;
-import interfaces.EdificioDao;
 import interfaces.UnidadFuncionalDao;
 import utiles.DBManager;
 

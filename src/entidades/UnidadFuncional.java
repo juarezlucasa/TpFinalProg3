@@ -1,7 +1,6 @@
 package entidades;
 
 import exceptions.DAOException;
-import interfaces.EdificioDao;
 import utiles.TableManager;
 
 public class UnidadFuncional {
@@ -34,7 +33,7 @@ public class UnidadFuncional {
 	public String getDepto() {
 		return depto;
 	}
-	public void setDepto(String direccion) {
+	public void setDepto(String depto) {
 		this.depto = depto;
 	}
 	public String getPropietario() {
